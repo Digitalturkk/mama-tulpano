@@ -14,12 +14,36 @@ datasource db {
 
 model Tulpano {
   id String @id @default(uuid())
+  photoUrl String?
   name String
   breastSize String @db.VarChar(3)
   phone String @unique
   email String @unique
+  expirience Int?
   password String
-  createdAt DateTime @default(now())
+  //mamaId String
 
   @@map("tulpanos") // Map the model to the "tulpanos" table in the database
+}
+
+model Mama {
+  id String @id @default(uuid())
+  name String
+  phone String @unique
+  email String @unique
+  password String
+
+  @@map("mamas")
+} 
+
+model Client {
+  id String @id @default(uuid())
+  name String
+  phone String @unique
+  email String @unique
+  password String
+  yearsOfLoyalty Int?
+  //tulpanoId String
+
+  @@map("clients")
 }
