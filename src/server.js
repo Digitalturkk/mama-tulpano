@@ -4,21 +4,31 @@ import { connectToDatabase, disconnectFromDatabase } from './config/db.js';
 
 // Importing routes
 import tulpanoRoutes from './routes/tulpanoRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 config();
 connectToDatabase();
 
 const app = express();
 
+// Middleware to parse JSON bodies
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // API routes
 app.use('/tulpanos', tulpanoRoutes);
+app.use('/auth', authRoutes);
 
 const PORT = 4040;
 const server = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
+
+
+
 // Handeling exceptions and rejections to ensure graceful shutdown
+
 // Handle unhandled promise rejections 
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Rejection:", err);
