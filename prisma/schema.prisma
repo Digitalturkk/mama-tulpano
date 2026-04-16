@@ -17,13 +17,18 @@ model Tulpano {
   photoUrl String?
   name String
   breastSize String @db.VarChar(3)
+  pricePerHour Int
   phone String @unique
   email String @unique
   expirience Int?
   password String
-  //mamaId String
+  mamaId String?
 
   @@map("tulpanos") // Map the model to the "tulpanos" table in the database
+  
+  // Relations
+  mama Mama? @relation("MamaTulpanos", fields: [mamaId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  clients Client[] @relation("ClientTulpanos")
 }
 
 model Mama {
@@ -34,16 +39,21 @@ model Mama {
   password String
 
   @@map("mamas")
+
+  // Relations
+  tulpanos Tulpano[] @relation("MamaTulpanos")
 } 
 
 model Client {
   id String @id @default(uuid())
   name String
+  yearsOfLoyalty Int?
   phone String @unique
   email String @unique
   password String
-  yearsOfLoyalty Int?
-  //tulpanoId String
 
   @@map("clients")
+
+  // Relations
+  tulapnos Tulpano[] @relation("ClientTulpanos")
 }
