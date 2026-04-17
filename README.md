@@ -31,7 +31,7 @@ This repository uses satire and humor as a creative format. It does **not** supp
 ## Final Words
 
 Sometimes humor can open the door to difficult conversations.  
-If this project starts even one serious discussion about protecting victims and defending human dignity, it has served a meaningful purpose.
+**If this project starts even one serious discussion about protecting victims and defending human dignity, it has served a meaningful purpose.**
 
 ## Technologies
 
