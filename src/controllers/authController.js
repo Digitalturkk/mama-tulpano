@@ -1,5 +1,6 @@
 import prisma from '../config/db.js';
 import bcrypt from 'bcryptjs';
+import { generateToken } from '../utils/generateToken.js';
 
 const register = async (req, res) => {
     try {
@@ -40,6 +41,9 @@ const register = async (req, res) => {
             }
         });
 
+        // Generating a token (you can use JWT or any other method to generate a token)
+        const token = generateToken(tulapno.id, res);
+
         res.status(201).json({
             status: "success",
             data: {
@@ -52,8 +56,9 @@ const register = async (req, res) => {
                     pricePerHour: newTulpano.pricePerHour,
                     expirience: newTulpano.expirience,
                     photoUrl: newTulpano.photoUrl,
-                    password: newTulpano.password
-                }
+                    password: newTulpano.password,
+                },
+                token: token
             }
         });
     } catch (error) {
@@ -62,4 +67,59 @@ const register = async (req, res) => {
     }
 };
 
-export { register };
+const login = async (req, res) => {
+    const {email, password} = req.body;
+
+    // Checking if the tulpano's email exists
+    const tulpano = await prisma.tulpano.findUnique({
+        where: {
+            email: email
+        }
+    });
+
+    if (!tulpano) {
+        return res
+            .status(401)
+            .json({message: "Invalid password or email!"});
+    };
+ 
+    // Verify password
+    const isPasswordValiud = await bcrypt.compare(password, tulpano.password);
+
+    if(!isPasswordValiud) {
+        return res.status(401).json({message: "Invalid password or email!"});
+    }
+
+    // Generating a token (you can use JWT or any other method to generate a token)
+    const token = generateToken(tulapno.id, res);
+
+    res.status(201).json({
+            status: "success",
+            data: {
+                user: {
+                    id: tulpano.id,
+                    name: tulpano.name,
+                    email: tulpano.email,
+                    phone: tulpano.phone,
+                    breastSize: tulpano.breastSize,
+                    pricePerHour: tulpano.pricePerHour,
+                    expirience: tulpano.expirience,
+                    photoUrl: tulpano.photoUrl,
+                    password: tulpano.password,
+                },
+                token: token
+            }
+        });
+};
+
+const logout = (req, res) => {
+    res.cookie("JWT", "", {
+        httpOnly: true,
+        expires: new Date(0)
+    });
+    res.status(200).json({status: "success", 
+        message: "Logout successful!"
+    });
+};
+
+export { register, login, logout };
