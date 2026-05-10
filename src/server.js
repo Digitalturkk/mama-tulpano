@@ -27,7 +27,7 @@ const server = app.listen(PORT, () => {
 
 
 
-// Handeling exceptions and rejections to ensure graceful shutdown
+// Handling exceptions and rejections to ensure graceful shutdown
 
 // Handle unhandled promise rejections 
 process.on("unhandledRejection", (err) => {
